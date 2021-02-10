@@ -136,6 +136,22 @@ Document some of the useful builtin configuration options available in upstream 
 -   exec function limits
 -   Memory and performance tweaks
 
+## Setting up a trusted SSL certificate for planet4.test
+
+If you want to get rid of the pesky certificate warning, or you need SSL to be set up correctly (e.g. Service workers
+will mostly not work unless this is the case), you can make your browser trust planet4.test by running `make certs`.
+
+This will generate a CA public and (temporary) private key, create a signing request for planet4.test and use the CA
+private key to sign the request. Traefik container gets the certificate with a [volume mapping](https://github.com/greenpeace/planet4-docker-compose/blob/dcb08cfed6aaec754b4a08fe53e546be1ce47240/docker-compose.yml#L19-L19).
+The last manual step is to import the .pem file of the CA into your browser as a trusted authority. This varies per
+browser and OS, we'll add or link to specific instructions here later.
+
+Because of this last step, it's crucial that we remove the private key after signing planet4.test. Otherwise it could be
+use to forge certificates of any domain that your browser will trust. This also means that re-generating the certificate
+requires you to import the .pem file again.
+
+The .pem file is `certs/myCA.pem`.
+
 ## Notes
 
 ### Updating
